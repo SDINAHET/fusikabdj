@@ -84,17 +84,17 @@ jobs:
       - name: Lint HTML
         run: npx htmlhint "templates/**/*.html" || true
 
-      - name: Check links (lychee)
-        uses: lycheeverse/lychee-action@v2
-        with:
-          args: >-
-            --verbose
-            --no-progress
-            --max-concurrency 4
-            "templates/**/*.html"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      # --- SUPPRIMER cette étape dans le job "frontend" ---
+      # - name: Check links (lychee)
+      #   uses: lycheeverse/lychee-action@v2
+      #   with:
+      #     args: >-
+      #       --verbose
+      #       --no-progress
+      #       --max-concurrency 4
+      #       "templates/**/*.html"
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   e2e:
     name: E2E • Playwright (UI + Visual + Axe) & Lighthouse
     runs-on: ubuntu-latest
@@ -125,6 +125,21 @@ jobs:
             fi
             sleep 1
           done
+
+      # --- AJOUTER dans le job "e2e", APRÈS "Start Flask app" (et après Playwright si tu veux) ---
+      - name: Check links (lychee) against live server
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --verbose
+            --no-progress
+            --max-concurrency 4
+            --accept 200,203,206,301,302,308
+            --retry-wait-time 2
+            --insecure
+            http://127.0.0.1:5000/
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
