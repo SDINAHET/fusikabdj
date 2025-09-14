@@ -38,10 +38,11 @@ jobs:
       - name: Lint (flake8)
         run: flake8 . --max-line-length=100 --extend-ignore=E203,W503 || true
 
-      - name: Run unit tests (pytest)
+      # Exclut les tests e2e dans ce job
+      - name: Run unit tests (pytest, no e2e)
         env:
           FLASK_ENV: testing
-        run: pytest -q --maxfail=1 --disable-warnings --cov=. --cov-report=xml
+        run: pytest -q -m "not e2e" --maxfail=1 --disable-warnings --cov=. --cov-report=xml
 
       - name: Upload coverage
         uses: actions/upload-artifact@v4
@@ -51,7 +52,7 @@ jobs:
           if-no-files-found: warn
 
   frontend:
-    name: Frontend • CSS/HTML Lint & Links
+    name: Frontend • CSS/HTML Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -84,19 +85,8 @@ jobs:
       - name: Lint HTML
         run: npx htmlhint "templates/**/*.html" || true
 
-      # --- SUPPRIMER cette étape dans le job "frontend" ---
-      # - name: Check links (lychee)
-      #   uses: lycheeverse/lychee-action@v2
-      #   with:
-      #     args: >-
-      #       --verbose
-      #       --no-progress
-      #       --max-concurrency 4
-      #       "templates/**/*.html"
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   e2e:
-    name: E2E • Playwright (UI + Visual + Axe) & Lighthouse
+    name: E2E • Playwright (UI + Axe + Visual) & Lighthouse & Links
     runs-on: ubuntu-latest
     needs: [backend, frontend]
     steps:
@@ -126,7 +116,17 @@ jobs:
             sleep 1
           done
 
-      # --- AJOUTER dans le job "e2e", APRÈS "Start Flask app" (et après Playwright si tu veux) ---
+      # Installe les navigateurs Playwright côté Python
+      - name: Install Playwright browsers (Python)
+        run: |
+          python -m playwright install --with-deps
+          # Pour accélérer : python -m playwright install chromium --with-deps
+
+      # Lance uniquement les tests marqués e2e (Playwright Python + axe)
+      - name: Run Playwright tests (pytest -m e2e)
+        run: pytest -q -m e2e
+
+      # Vérifie les liens sur le site rendu (pas sur les templates Jinja)
       - name: Check links (lychee) against live server
         uses: lycheeverse/lychee-action@v2
         with:
@@ -141,81 +141,30 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install backend deps
+      # Crée un lighthouserc minimal si absent, puis lance Lighthouse CI
+      - name: Ensure Lighthouse config
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt || true
-
-      # ✅ AJOUTER (ou remplacer l'étape npx existante)
-      - name: Install Playwright browsers (Python)
-        run: |
-          python -m playwright install --with-deps
-          # Astuce: si tu veux aller plus vite, installe juste Chromium:
-          # python -m playwright install chromium --with-deps
-
-      # (tu peux supprimer ces lignes si elles existent encore)
-      # - name: Install Playwright + test deps
-      #   run: |
-      #     npm init -y >/dev/null 2>&1 || true
-      #     npm i -D @playwright/test axe-core @axe-core/playwright
-      #     npx playwright install --with-deps
-
-      - name: Create sample Playwright test if missing
-        run: |
-          mkdir -p tests/e2e
-          if [ ! -f tests/e2e/smoke.spec.ts ]; then
-            cat > tests/e2e/smoke.spec.ts <<'TS'
-          import { test, expect } from '@playwright/test';
-          import axe from '@axe-core/playwright';
-
-          test('homepage loads, links work, basic a11y passes', async ({ page }) => {
-            await page.goto('http://127.0.0.1:5000');
-            await expect(page).toHaveTitle(/FUSIKAB|Fusikab|DJ/i);
-
-            const firstLink = page.locator('a[href^="/"]').first();
-            if (await firstLink.count()) {
-              await firstLink.click();
-              await expect(page).toHaveURL(/http:\/\/127\.0\.0\.1:5000/);
+          if [ ! -f lighthouserc.json ]; then
+            cat > lighthouserc.json <<'JSON'
+            {
+              "ci": {
+                "collect": {
+                  "numberOfRuns": 1,
+                  "url": ["http://127.0.0.1:5000/"]
+                },
+                "assert": {
+                  "assertions": {
+                    "categories:accessibility": ["error", {"minScore": 0.9}],
+                    "color-contrast": "error",
+                    "image-alt": "error",
+                    "link-name": "warn",
+                    "viewport": "warn"
+                  }
+                }
+              }
             }
-
-            await axe.run(page, {
-              runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa'] },
-            });
-          });
-
-          test('visual regression: homepage', async ({ page }) => {
-            await page.goto('http://127.0.0.1:5000');
-            await expect(page).toHaveScreenshot({ fullPage: true });
-          });
-          TS
+            JSON
           fi
-
-      # - name: Run Playwright tests
-      #   run: npx playwright test --reporter=list,junit,line
-      - name: Run Playwright tests
-        run: pytest -q -m e2e
-        # ou: npx playwright test ... si tu as aussi une suite JS séparée
-
-      - name: Upload Playwright report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: |
-            playwright-report
-            test-results
-            server.log
-          if-no-files-found: warn
 
       - name: Lighthouse CI (accessibility & contrast)
         uses: treosh/lighthouse-ci-action@v12
@@ -226,34 +175,12 @@ jobs:
           uploadArtifacts: true
           temporaryPublicStorage: true
 
-      - name: Create default Lighthouse config if missing, then rerun
-        if: failure()
-        run: |
-          cat > lighthouserc.json <<'JSON'
-          {
-            "ci": {
-              "collect": {
-                "numberOfRuns": 1,
-                "url": ["http://127.0.0.1:5000/"]
-              },
-              "assert": {
-                "assertions": {
-                  "categories:accessibility": ["error", {"minScore": 0.9}],
-                  "color-contrast": "error",
-                  "image-alt": "error",
-                  "link-name": "warn",
-                  "viewport": "warn"
-                }
-              }
-            }
-          }
-          JSON
-          npx @lhci/cli autorun --config=./lighthouserc.json || true
-
-      - name: Upload Lighthouse artifacts
+      - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: lighthouse-artifacts
-          path: ".lighthouseci/*"
+          name: e2e-and-lhci
+          path: |
+            .lighthouseci/**
+            server.log
           if-no-files-found: warn
