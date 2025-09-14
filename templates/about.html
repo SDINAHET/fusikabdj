@@ -7,7 +7,17 @@
 {% block content %}
 <section class="about-section container my-5 fade-in">
     <h1 class="text-center mb-4">À propos de Fusikab DJ</h1>
-    <p class="lead text-center">
+
+    <!-- Paragraphe sur l'histoire et l'esprit de l'entreprise -->
+    <p class="text-center mt-4">
+        L’entreprise a été créée par deux passionnés de musique et de mix, Baptiste et Albin, et a été rejointe plus tard par Stéphane.
+        C’est comme une entreprise familiale : chacun apporte sa passion, son expertise et sa créativité, et nous travaillons main dans la main dans un esprit de confiance, de convivialité et de complicité.
+        Cette approche nous permet de rester proches de nos clients, de comprendre leurs besoins et de leur offrir des prestations sur mesure.
+        Pour nous, chaque projet est bien plus qu’un simple travail : c’est l’occasion de partager notre amour pour la musique et de créer des expériences mémorables.
+    </p>
+
+    <!-- Texte d'introduction / mission -->
+    <p class="lead text-center mt-4">
         Notre mission est de transformer vos événements en expériences inoubliables
         grâce à notre expertise en animation musicale et en sonorisation.
     </p>
@@ -15,19 +25,17 @@
     <h2 class="text-center mt-5">Notre Équipe</h2>
     <div class="row mt-4">
 
-        <!-- Baptiste -->
+        <!-- Baptiste-->
         <div class="col-md-4 mb-4">
-            <div class="card team-card shadow-lg h-100">
+            <div class="card team-card text-center shadow-lg h-100">
                 <img src="{{ url_for('static', filename='images/baptiste.png') }}"
                      alt="Baptiste RIVIÈRE"
-                     class="team-photo rounded-circle mx-auto mt-3 d-block">
-                <div class="card-body text-center">
+                     class="team-photo rounded-circle mx-auto mt-3">
+                <div class="card-body">
                     <h5 class="card-title">Baptiste RIVIÈRE</h5>
-                    <!-- Ici on ajoute une classe spéciale pour le décalage -->
-                    <p class="card-subtitle mb-2 subtitle-baptiste">Gérant</p>
-                    <p class="card-text">DJ, Technicien Son &amp; Lumière</p>
+                    <p class="card-subtitle mb-2">DJ, Technicien Son &amp; Lumière</p>
                     <p class="card-text">
-                        <em>[Diplôme de DJ Animateur et Technicien Son et Lumière délivré par le CFPM de Rennes]</em>
+                        <em>[Diplôme de DJ Animateur, Technicien Son et Lumière délivré par le CFPM de Rennes]</em>
                     </p>
                 </div>
             </div>
@@ -58,7 +66,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Stéphane DINAHET</h5>
                     <p class="card-subtitle mb-2">DJ, Technicien Son &amp; Lumière</p>
-                    <p class="card-text"><em>[En formation]</em></p>
+                    <p class="card-text"><em>[En formation pour le RNCP5 de DJ Producteur de musiques actuelles]</em></p>
                 </div>
             </div>
         </div>

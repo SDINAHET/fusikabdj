@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/partenaire/index_partenaires.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="partenaire-page container my-5 fade-in">
+    <h1 class="text-center mb-4">Nos Partenaires</h1>
+    <p class="lead text-center mb-5">
+        Retrouvez nos partenaires classés par catégorie pour organiser vos événements en toute sérénité.
+    </p>
+
+    <!-- Catégorie : Lieux de réception -->
+    <section class="mb-5">
+        <h2 class="mb-4">Lieux de réception</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <!-- Exemple : Salle le 5B -->
+            <div class="col">
+                <div class="partner-card text-center h-100">
+                    <a href="{{ url_for('partenaire1_sallele5B') }}" class="text-decoration-none text-white">
+                        <img src="{{ url_for('static', filename='images/partenaire1_sallele5B/logo.jpg') }}"
+                             alt="Salle le 5B" class="img-fluid rounded shadow-sm mb-3">
+                        <h3>Salle le 5B</h3>
+                        <p>Une salle moderne et modulable pour tous vos événements.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catégorie : Autres services -->
+    <section class="mb-5">
+        <h2 class="mb-4">Autres services</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <!-- NOZ Chantepie -->
+            <div class="col">
+                <div class="partner-card text-center h-100">
+                    <a href="{{ url_for('partenaire2_nozchantepie') }}" class="text-decoration-none text-white">
+                        <img src="{{ url_for('static', filename='images/partenaire2_nozchantepie/logo.jpg') }}"
+                             alt="NOZ Chantepie" class="img-fluid rounded shadow-sm mb-3">
+                        <h3>NOZ Chantepie</h3>
+                        <p>Magasin de déstockage proposant une large gamme de produits pour vos événements à petits prix.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catégorie : Photographes -->
+    <section class="mb-5">
+        <h2 class="mb-4">Photographes</h2>
+        <div class="partner-alert text-center">
+            Nous sommes actuellement en recherche de partenaires photographes.<br>
+            Si vous souhaitez vous allier à nous, n’hésitez pas à nous <a href="{{ url_for('contact') }}">contacter</a>.
+        </div>
+    </section>
+
+    <!-- Catégorie : Traiteurs -->
+    <section class="mb-5">
+        <h2 class="mb-4">Traiteurs</h2>
+        <div class="partner-alert text-center">
+            Nous sommes actuellement en recherche de partenaires traiteurs.<br>
+            Si vous souhaitez vous allier à nous, n’hésitez pas à nous <a href="{{ url_for('contact') }}">contacter</a>.
+        </div>
+    </section>
+</div>
+{% endblock %}

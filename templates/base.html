@@ -2,11 +2,14 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
     <title>Fusikab DJ</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
     <!-- Base CSS (global) -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
@@ -23,13 +26,13 @@
 </head>
 <body>
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('index') }}">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
                 <img src="{{ url_for('static', filename='images/logo_fusikabdj_noir.jpg') }}"
                      alt="Fusikab DJ"
-                     class="d-inline-block align-text-top"
-                     style="height: 50px; margin-right: 10px;">
+                     class="d-inline-block align-text-top me-2"
+                     style="height: 50px;">
                 Fusikab DJ
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -38,31 +41,43 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('index') }}">Accueil</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">À propos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('services') }}">Services</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('gallery') }}">Galerie</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('contact') }}">Contact</a></li>
-                </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link active" href="{{ url_for('index') }}">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">À propos</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('services') }}">Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('gallery') }}">Galerie</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('partenaires') }}">Partenaires</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('disponibilites') }}">Disponibilités</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('contact') }}">Contact</a></li>
+            </ul>
             </div>
         </div>
     </nav>
 
     <!-- MAIN CONTENT -->
-    <main class="container my-5">
+    <main class="container my-5 pt-5">
         {% block content %}{% endblock %}
     </main>
 
     <!-- FOOTER -->
     <footer class="bg-dark text-white text-center py-4">
-        <p>&copy; 2025 Fusikab DJ – Tous droits réservés</p>
+        <p>&copy;Site codé entièrement par Baptiste RIVIERE pour Fusikab DJ – Tous droits réservés – dernière MAJ : Sept 2025</p>
         <p>
             <a href="{{ url_for('cgv') }}" class="text-white">CGV</a> |
             <a href="{{ url_for('cgu') }}" class="text-white">CGU</a> |
             <a href="{{ url_for('politique_cookies') }}" class="text-white">Politique cookies</a> |
             <a href="{{ url_for('politique_confidentialite') }}" class="text-white">Politique confidentialité</a>
         </p>
+
+        <!-- Réseaux sociaux et contact -->
+        <div class="mt-3">
+            <a href="https://www.instagram.com/fusikabdj" target="_blank" class="text-white mx-2 fs-4"><i class="bi bi-instagram"></i></a>
+            <a href="https://www.facebook.com/people/Fusikab-DJ/61555332460864/" target="_blank" class="text-white mx-2 fs-4"><i class="bi bi-facebook"></i></a>
+            <a href="https://www.tiktok.com/@fusikab.dj" target="_blank" class="text-white mx-2 fs-4"><i class="bi bi-tiktok"></i></a>
+            <a href="tel:+33652325357" class="text-white mx-2 fs-4"><i class="bi bi-telephone-fill"></i></a>
+            <a href="mailto:fusikabdj@gmail.com" class="text-white mx-2 fs-4"><i class="bi bi-envelope-fill"></i></a>
+            <a href="https://share.google/iyAfXLZLhyBaPfqcq" target="_blank" class="text-white mx-2 fs-4"><i class="bi bi-geo-alt-fill"></i></a>
+        </div>
     </footer>
 
     <!-- Bootstrap JS -->

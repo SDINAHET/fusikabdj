@@ -12,77 +12,87 @@
 
     <!-- Services 4x2 -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mt-4">
+
         <!-- Sonorisation -->
         <div class="col">
-            <div class="service-card text-center h-100">
-                <h3>Sonorisation</h3>
-                <p>Un son de qualité professionnelle pour vos événements, adapté à chaque espace et ambiance.</p>
-            </div>
+            <a href="{{ url_for('sonorisation') }}" class="text-decoration-none text-white">
+                <div class="service-card text-center h-100">
+                    <h3>Sonorisation</h3>
+                    <p>Un son de qualité professionnelle pour vos événements, adapté à chaque espace et ambiance.</p>
+                </div>
+            </a>
         </div>
 
         <!-- Lumières -->
         <div class="col">
-            <div class="service-card text-center h-100">
-                <h3>Lumières</h3>
-                <p>Des jeux de lumière dynamiques et des effets visuels pour transformer vos soirées.</p>
-            </div>
+            <a href="{{ url_for('lumieres') }}" class="text-decoration-none text-white">
+                <div class="service-card text-center h-100">
+                    <h3>Lumières</h3>
+                    <p>Des jeux de lumière dynamiques et des effets visuels pour transformer vos soirées.</p>
+                </div>
+            </a>
         </div>
 
         <!-- Animation musicale -->
         <div class="col">
-            <div class="service-card text-center h-100">
-                <h3>Animation musicale</h3>
-                <p>DJ professionnels pour créer l’ambiance musicale parfaite selon vos goûts et vos invités.</p>
-            </div>
+            <a href="{{ url_for('animation_musicale') }}" class="text-decoration-none text-white">
+                <div class="service-card text-center h-100">
+                    <h3>Animation musicale</h3>
+                    <p>DJ professionnels pour créer l’ambiance musicale parfaite selon vos goûts et vos invités.</p>
+                </div>
+            </a>
         </div>
 
         <!-- Engagement écoresponsable -->
         <div class="col">
-            <div class="service-card text-center h-100">
-                <a href="{{ url_for('engagement_ecoresponsable') }}" class="text-decoration-none text-white">
+            <a href="{{ url_for('engagement_ecoresponsable') }}" class="text-decoration-none text-white">
+                <div class="service-card text-center h-100">
                     <h3>Engagement écoresponsable</h3>
                     <p>Des solutions durables pour vos événements, tout en conservant qualité et convivialité.</p>
-                </a>
-            </div>
+                </div>
+            </a>
         </div>
 
         <!-- Prestations sur mesure -->
         <div class="col">
-            <div class="service-card text-center h-100">
-                <a href="{{ url_for('prestations_sur_mesure') }}" class="text-decoration-none text-white">
+            <a href="{{ url_for('prestations_sur_mesure') }}" class="text-decoration-none text-white">
+                <div class="service-card text-center h-100">
                     <h3>Prestations sur mesure</h3>
                     <p>Des prestations personnalisées selon vos besoins, votre budget et votre thème.</p>
-                </a>
-            </div>
+                </div>
+            </a>
         </div>
 
         <!-- Vidéo & Projection -->
         <div class="col">
-            <div class="service-card text-center h-100">
-                <a href="{{ url_for('video_projection') }}" class="text-decoration-none text-white">
+            <a href="{{ url_for('video_projection') }}" class="text-decoration-none text-white">
+                <div class="service-card text-center h-100">
                     <h3>Vidéo & Projection</h3>
                     <p>Immortalisez vos événements avec des projections vidéo, montages et live streaming.</p>
-                </a>
-            </div>
+                </div>
+            </a>
         </div>
 
         <!-- Animation interactive -->
         <div class="col">
-            <div class="service-card text-center h-100">
-                <a href="{{ url_for('animation_interactive') }}" class="text-decoration-none text-white">
+            <a href="{{ url_for('animation_interactive') }}" class="text-decoration-none text-white">
+                <div class="service-card text-center h-100">
                     <h3>Animation interactive</h3>
                     <p>Impliquez vos invités grâce à des quiz, karaokés et interactions via leur téléphone.</p>
-                </a>
-            </div>
+                </div>
+            </a>
         </div>
 
         <!-- Conseil & Coaching -->
         <div class="col">
-            <div class="service-card text-center h-100">
-                <h3>Conseil & Coaching</h3>
-                <p>Accompagnement personnalisé pour créer vos playlists et harmoniser musique, lumière et décoration.</p>
-            </div>
+            <a href="{{ url_for('conseil_coaching') }}" class="text-decoration-none text-white">
+                <div class="service-card text-center h-100">
+                    <h3>Conseil & Coaching</h3>
+                    <p>Accompagnement personnalisé pour créer vos playlists et harmoniser musique, lumière et décoration.</p>
+                </div>
+            </a>
         </div>
+
     </div>
 
     <!-- Types d'événements -->

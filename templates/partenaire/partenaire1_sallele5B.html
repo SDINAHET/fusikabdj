@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/partenaire/partenaire1_sallele5B.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="gallery-page container my-5 fade-in">
+    <h1 class="text-center mb-2 gallery-title">Salle Le 5B</h1>
+    <p class="lead text-center text-white gallery-subtitle">
+        Nichée au cœur du territoire de Brocéliande, la salle le 5B vous accueille depuis janvier 2018 dans ses espaces rénovés.
+    </p>
+
+    <!-- Carousel -->
+    <div id="galleryCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            {% for i in range(1,13) %}
+            <div class="carousel-item {% if i == 1 %}active{% endif %}">
+                <img src="{{ url_for('static', filename='images/partenaire1_sallele5B/salle' ~ i ~ '.jpg') }}"
+                     class="d-block w-100 carousel-image"
+                     alt="Salle {{ i }}">
+            </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#galleryCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#galleryCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- Texte détaillé -->
+    <div class="salle-description mt-5">
+        <p>Une salle de réceptions idéalement située entre Terre et Mer, à 20 minutes de Rennes, 45 min de Vannes, et seulement quelques minutes de la forêt de Brocéliande.</p>
+        <p>La salle du 5B peut accueillir confortablement jusqu’à 120 personnes assises. L’établissement et les gîtes sont accessibles aux Personnes à Mobilité Réduite. Salle de réceptions, salle de mariage, anniversaire, départ en retraite, cousinades, réunions de famille, séminaires… le 5B est une salle de réceptions où on peut tout imaginer.</p>
+        <p>Nous n’imposons pas de prestataires. Néanmoins, si vous n’avez pas le temps ou l’envie de l’organiser, nous vous proposons une prestation « organisation ».</p>
+        <p>Auberge datant de 1635, nous avons tout mis en œuvre pour créer un lieu de vie alliant charme de l’ancien et confort du moderne. Une salle de réceptions avec du caractère dans un environnement calme et retiré. Tout comme nous n’imposons pas de prestataires, nous n’imposons pas non plus de contraintes horaires.</p>
+        <p>Bien que nous ayons conçu la location de la salle avec les couchages, il est possible de louer uniquement la salle de réceptions et la cuisine. Nous avons également aménagé des chambres, dont une avec accès PMR, et un gîte pour prolonger votre séjour. Des logements insolites sont également disponibles à la location.</p>
+        <p>A l’écoute de vos envies, le 5B s’investit au mieux afin de satisfaire vos évènements.</p>
+        <p class="text-white">Une salle moderne et modulable pour tous vos événements.</p>
+
+        <!-- Bouton visiter le site -->
+        <div class="text-center mt-4">
+            <a href="https://salle-le5b.fr/" target="_blank" class="btn btn-warning btn-lg">Visiter le site web</a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // CAROUSEL AUTO-SLIDE
+    const carousel = document.querySelector("#galleryCarousel");
+    if (carousel) {
+        let currentIndex = 0;
+        const slides = carousel.querySelectorAll(".carousel-item");
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove("active"));
+            slides[index].classList.add("active");
+        }
+
+        setInterval(() => {
+            if (totalSlides > 0) {
+                currentIndex = (currentIndex + 1) % totalSlides;
+                showSlide(currentIndex);
+            }
+        }, 5000);
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/disponibilites.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dispo-page container my-5 fade-in">
+    <h1 class="text-center mb-4 text-warning">Disponibilités</h1>
+    <p class="lead text-center text-white mb-4">
+        Consultez nos disponibilités en temps réel et réservez un RDV directement depuis le site.
+    </p>
+
+    <p class="text-center text-white mb-4">
+        Réservez un <strong>RDV téléphonique</strong> ou une <strong>visioconférence Google Meet</strong> directement ici :
+    </p>
+
+    <!-- Conteneur côte à côte -->
+    <div class="d-flex flex-wrap justify-content-center gap-4 mb-5">
+        <!-- Koalendar intégré -->
+        <div class="koalendar-wrapper">
+            <iframe src="https://koalendar.com/u/fusikab-dj/"
+                    class="koalendar-iframe"
+                    frameborder="0"
+                    scrolling="no">
+            </iframe>
+        </div>
+
+        <!-- Google Calendar intégré -->
+        <div class="calendar-wrapper">
+            <iframe src="https://calendar.google.com/calendar/embed?src=ZnVzaWthYmRqQGdtYWlsLmNvbQ&ctz=Europe%2FParis"
+                    class="calendar-iframe"
+                    frameborder="0"
+                    scrolling="no">
+            </iframe>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,16 +1,27 @@
 {% extends "base.html" %}
 
-<link rel="stylesheet" href="static/css/prestations_sur_mesure.css">
-
-{% block content %}
-<div class="container my-5">
-    <h1>Prestations sur mesure</h1>
-    <p>Chez Fusikab DJ, chaque événement est unique.</p>
-    <p>C’est pourquoi aucun tarif fixe n’est affiché : nous concevons des prestations 100 % personnalisées, adaptées à vos envies, vos contraintes et votre budget.</p>
-    <p>Quel que soit le type d’événement (mariage, anniversaire, soirée d’entreprise, etc.), nous vous accompagnons de la première prise de contact jusqu’au jour J.</p>
-    <p>Contactez-nous dès aujourd’hui pour discuter de votre projet.</p>
-    <p>Recevez un devis gratuit, sans engagement.</p>
-</div>
+{% block extra_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/prestations_sur_mesure.css') }}">
 {% endblock %}
 
-<link rel="stylesheet" href="static/css/prestations_sur_mesure.css">
+{% block content %}
+<div class="container prestations-section my-5 fade-in">
+    <h1 class="text-center mb-4">Prestations sur mesure</h1>
+    <p class="lead text-center">Chez Fusikab DJ, chaque événement est unique.</p>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-10">
+            <div class="prestations-card p-4">
+                <p>C’est pourquoi aucun tarif fixe n’est affiché : nous concevons des prestations 100 % personnalisées, adaptées à vos envies, vos contraintes et votre budget.</p>
+                <p>Quel que soit le type d’événement (mariage, anniversaire, soirée d’entreprise, etc.), nous vous accompagnons de la première prise de contact jusqu’au jour J.</p>
+                <p>Contactez-nous dès aujourd’hui pour discuter de votre projet.</p>
+                <p>Recevez un devis gratuit, sans engagement.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ url_for('contact') }}" class="btn btn-warning btn-lg">Demander un devis</a>
+    </div>
+</div>
+{% endblock %}

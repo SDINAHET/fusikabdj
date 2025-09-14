@@ -1,0 +1,117 @@
+/* ===========================
+   PARTENAIRES - FUSIKAB DJ
+   =========================== */
+
+/* BODY & CONTENEUR */
+.partenaire-page {
+    font-family: 'Poppins', sans-serif;
+    background-color: #0d0d0d;
+    color: #f5f5f5;
+}
+
+/* TITRES */
+.partenaire-page h1 {
+    color: #ffcc00;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+
+.partenaire-page h2 {
+    color: #ffcc00;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* FADE-IN ANIMATION */
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* PARTNER CARD */
+.partner-card {
+    background-color: #1a1a1a;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+.partner-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 5px 20px rgba(255,204,0,0.5);
+}
+
+.partner-card img {
+    max-height: 100px;
+    object-fit: contain;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.partner-card h3 {
+    color: #ffcc00;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.partner-card p {
+    color: #f5f5f5;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+/* ALERT PARTENAIRE (photographe, traiteur, autres) */
+.partner-alert {
+    background-color: #1a1a1a;
+    border: 2px dashed #ffcc00;
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    color: #f5f5f5;
+    font-size: 1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.partner-alert a {
+    color: #ffcc00;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.partner-alert a:hover {
+    color: #fff;
+    border-color: #ffcc00;
+}
+
+.partner-alert:hover {
+    transform: scale(1.02);
+    box-shadow: 0 5px 20px rgba(255,204,0,0.5);
+}
+
+/* SUPPRESSION DES COULEURS BLEUES BOOTSTRAP */
+.partenaire-page .alert-info {
+    background-color: #1a1a1a;
+    border-color: #ffcc00;
+    color: #f5f5f5;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .partner-card img {
+        max-height: 80px;
+    }
+}

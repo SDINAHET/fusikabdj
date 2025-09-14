@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/partenaire/partenaire1_sallele5B.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="gallery-page container my-5 fade-in">
+    <h1 class="text-center mb-2 gallery-title">NOZ Chantepie</h1>
+    <p class="lead text-center text-white gallery-subtitle">
+        Magasin de déstockage proposant une large gamme de produits à prix réduits.
+    </p>
+
+    <!-- Carousel -->
+    <div id="galleryCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            {% for i in range(1,4) %}
+            <div class="carousel-item {% if i == 1 %}active{% endif %}">
+                <img src="{{ url_for('static', filename='images/partenaire2_nozchantepie/noz' ~ i ~ '.jpg') }}"
+                     class="d-block w-100 carousel-image"
+                     alt="NOZ Chantepie {{ i }}">
+            </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#galleryCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Précédent</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#galleryCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Suivant</span>
+        </button>
+    </div>
+
+    <!-- Texte détaillé -->
+    <div class="salle-description mt-5">
+        <p>NOZ Chantepie est un magasin spécialisé dans le déstockage et la vente de produits à prix réduits. Vous y trouverez un large choix d’articles allant de la décoration, aux produits pour la maison, aux loisirs créatifs et plus encore.</p>
+        <p>Idéal pour les particuliers et les professionnels à la recherche de bonnes affaires et de produits variés.</p>
+        <p>Le magasin est situé à Chantepie, à proximité immédiate de Rennes, avec un accès facile et un grand parking pour ses clients.</p>
+
+        <!-- Bouton visiter le site -->
+        <div class="text-center mt-4">
+            <a href="https://www.facebook.com/p/Noz-chantepie-61569594166661/" target="_blank" class="btn btn-warning btn-lg">
+                Visiter le site web
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // CAROUSEL AUTO-SLIDE
+    const carousel = document.querySelector("#galleryCarousel");
+    if (carousel) {
+        let currentIndex = 0;
+        const slides = carousel.querySelectorAll(".carousel-item");
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove("active"));
+            slides[index].classList.add("active");
+        }
+
+        setInterval(() => {
+            if (totalSlides > 0) {
+                currentIndex = (currentIndex + 1) % totalSlides;
+                showSlide(currentIndex);
+            }
+        }, 5000);
+    }
+});
+</script>
+{% endblock %}

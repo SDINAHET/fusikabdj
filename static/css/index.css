@@ -1,12 +1,18 @@
-/* RESET / GLOBAL */
+/* ===========================
+   RESET / GLOBAL
+   =========================== */
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #0d0d0d;
     color: #f5f5f5;
     line-height: 1.6;
+    margin: 0;
+    padding: 0;
 }
 
-/* TITRES */
+/* ===========================
+   TITRES
+   =========================== */
 h1, h2, h5 {
     font-weight: 600;
     letter-spacing: 1px;
@@ -17,10 +23,13 @@ h2 {
     text-transform: uppercase;
 }
 
-/* HERO SECTION */
+/* ===========================
+   HERO SECTION
+   =========================== */
 .hero-section {
     background: linear-gradient(135deg, rgba(0,0,0,0.9), rgba(20,20,20,0.8));
     padding: 80px 0;
+    text-align: center;
 }
 
 .hero-section p {
@@ -28,6 +37,7 @@ h2 {
     opacity: 0.85;
 }
 
+/* Boutons Hero */
 .hero-section .btn-warning {
     background-color: #ffcc00;
     border: none;
@@ -43,7 +53,23 @@ h2 {
     transform: translateY(-3px);
 }
 
-/* SERVICES */
+.hero-section .btn-outline-warning {
+    color: #ffcc00;
+    border-color: #ffcc00;
+    font-weight: 600;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+}
+
+.hero-section .btn-outline-warning:hover {
+    background-color: #ffcc00;
+    color: #000;
+    transform: translateY(-3px);
+}
+
+/* ===========================
+   SERVICES
+   =========================== */
 .services-preview h2 {
     margin-bottom: 50px;
 }
@@ -65,20 +91,81 @@ h2 {
     font-size: 1.3rem;
 }
 
-/* ILS NOUS FONT CONFIANCE */
+/* ===========================
+   ILS NOUS FONT CONFIANCE
+   =========================== */
 .container h2 {
     margin-bottom: 40px;
 }
 
-.card img {
-    transition: transform 0.3s ease;
+/* Cartes clients "Ils nous font confiance" */
+.client-card {
+    background-color: #1a1a1a;
+    border-radius: 15px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card img:hover {
+.client-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(255, 204, 0, 0.4);
+}
+
+.partenaire-logo-small {
+    width: 120px;
+    height: 80px;
+    object-fit: contain;
+    padding: 5px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.partenaire-logo-small:hover {
     transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(255, 204, 0, 0.5);
 }
 
-/* FADE-IN ANIMATION */
+/* ===========================
+   PARTENAIRES
+   =========================== */
+.partenaire-text-jaune-blanc h5 {
+    color: #ffcc00; /* titre jaune */
+}
+
+.partenaire-text-jaune-blanc p {
+    color: #ffffff; /* texte descriptif blanc */
+}
+
+/* Logo sur Hero */
+.logo-partenaire {
+    max-height: 100px;
+    margin-bottom: 20px;
+}
+
+/* Logo dans les cartes partenaires */
+.logo-partenaire-card {
+    max-height: 100px;
+    object-fit: contain;
+    margin: 0 auto 10px auto;
+}
+
+.partners-preview .card {
+    background-color: #1a1a1a;
+    border: none;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.partners-preview .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(255, 204, 0, 0.4);
+}
+
+/* ===========================
+   ANIMATIONS
+   =========================== */
 .fade-in {
     opacity: 0;
     animation: fadeIn 1.2s forwards;
@@ -89,7 +176,9 @@ h2 {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* RESPONSIVE */
+/* ===========================
+   RESPONSIVE
+   =========================== */
 @media (max-width: 768px) {
     .hero-section {
         text-align: center;
