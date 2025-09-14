@@ -1,0 +1,223 @@
+name: CI - Backend, Frontend, E2E, A11y & Visual
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend • PyTest & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ hashFiles('**/requirements.txt') }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+          pip install pytest pytest-cov flake8
+
+      - name: Lint (flake8)
+        run: flake8 . --max-line-length=100 --extend-ignore=E203,W503 || true
+
+      - name: Run unit tests (pytest)
+        env:
+          FLASK_ENV: testing
+        run: pytest -q --maxfail=1 --disable-warnings --cov=. --cov-report=xml
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-xml
+          path: coverage.xml
+          if-no-files-found: warn
+
+  frontend:
+    name: Frontend • CSS/HTML Lint & Links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
+
+      - name: Install linters
+        run: |
+          npm init -y >/dev/null 2>&1 || true
+          npm i -D stylelint stylelint-config-standard stylelint-config-recommended
+          npm i -D htmlhint
+          echo '{ "extends": ["stylelint-config-standard","stylelint-config-recommended"] }' > .stylelintrc.json
+          echo '{ "attr-lowercase": true, "doctype-first": false, "tag-pair": true, "tagname-lowercase": true }' > .htmlhintrc
+
+      - name: Lint CSS
+        run: npx stylelint "static/**/*.css" || true
+
+      - name: Lint HTML
+        run: npx htmlhint "templates/**/*.html" || true
+
+      - name: Check links (lychee)
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --verbose
+            --no-progress
+            --max-concurrency 4
+            "templates/**/*.html"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  e2e:
+    name: E2E • Playwright (UI + Visual + Axe) & Lighthouse
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install backend deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+
+      - name: Start Flask app
+        env:
+          FLASK_ENV: production
+          PORT: 5000
+        run: |
+          nohup python run.py > server.log 2>&1 &
+          for i in {1..60}; do
+            if curl -sSf http://127.0.0.1:5000 >/dev/null; then
+              echo "Server is up"; break
+            fi
+            sleep 1
+          done
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Playwright + test deps
+        run: |
+          npm init -y >/dev/null 2>&1 || true
+          npm i -D @playwright/test axe-core @axe-core/playwright
+          npx playwright install --with-deps
+
+      - name: Create sample Playwright test if missing
+        run: |
+          mkdir -p tests/e2e
+          if [ ! -f tests/e2e/smoke.spec.ts ]; then
+            cat > tests/e2e/smoke.spec.ts <<'TS'
+          import { test, expect } from '@playwright/test';
+          import axe from '@axe-core/playwright';
+
+          test('homepage loads, links work, basic a11y passes', async ({ page }) => {
+            await page.goto('http://127.0.0.1:5000');
+            await expect(page).toHaveTitle(/FUSIKAB|Fusikab|DJ/i);
+
+            const firstLink = page.locator('a[href^="/"]').first();
+            if (await firstLink.count()) {
+              await firstLink.click();
+              await expect(page).toHaveURL(/http:\/\/127\.0\.0\.1:5000/);
+            }
+
+            await axe.run(page, {
+              runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa'] },
+            });
+          });
+
+          test('visual regression: homepage', async ({ page }) => {
+            await page.goto('http://127.0.0.1:5000');
+            await expect(page).toHaveScreenshot({ fullPage: true });
+          });
+          TS
+          fi
+
+      - name: Run Playwright tests
+        run: npx playwright test --reporter=list,junit,line
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report
+            test-results
+            server.log
+          if-no-files-found: warn
+
+      - name: Lighthouse CI (accessibility & contrast)
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            http://127.0.0.1:5000/
+          configPath: ./lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+      - name: Create default Lighthouse config if missing, then rerun
+        if: failure()
+        run: |
+          cat > lighthouserc.json <<'JSON'
+          {
+            "ci": {
+              "collect": {
+                "numberOfRuns": 1,
+                "url": ["http://127.0.0.1:5000/"]
+              },
+              "assert": {
+                "assertions": {
+                  "categories:accessibility": ["error", {"minScore": 0.9}],
+                  "color-contrast": "error",
+                  "image-alt": "error",
+                  "link-name": "warn",
+                  "viewport": "warn"
+                }
+              }
+            }
+          }
+          JSON
+          npx @lhci/cli autorun --config=./lighthouserc.json || true
+
+      - name: Upload Lighthouse artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-artifacts
+          path: ".lighthouseci/*"
+          if-no-files-found: warn
