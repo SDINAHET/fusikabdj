@@ -146,11 +146,29 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install Playwright + test deps
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install backend deps
         run: |
-          npm init -y >/dev/null 2>&1 || true
-          npm i -D @playwright/test axe-core @axe-core/playwright
-          npx playwright install --with-deps
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+
+      # ✅ AJOUTER (ou remplacer l'étape npx existante)
+      - name: Install Playwright browsers (Python)
+        run: |
+          python -m playwright install --with-deps
+          # Astuce: si tu veux aller plus vite, installe juste Chromium:
+          # python -m playwright install chromium --with-deps
+
+      # (tu peux supprimer ces lignes si elles existent encore)
+      # - name: Install Playwright + test deps
+      #   run: |
+      #     npm init -y >/dev/null 2>&1 || true
+      #     npm i -D @playwright/test axe-core @axe-core/playwright
+      #     npx playwright install --with-deps
 
       - name: Create sample Playwright test if missing
         run: |
@@ -182,8 +200,11 @@ jobs:
           TS
           fi
 
+      # - name: Run Playwright tests
+      #   run: npx playwright test --reporter=list,junit,line
       - name: Run Playwright tests
-        run: npx playwright test --reporter=list,junit,line
+        run: pytest -q -m e2e
+        # ou: npx playwright test ... si tu as aussi une suite JS séparée
 
       - name: Upload Playwright report
         if: always()
